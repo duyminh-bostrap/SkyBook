@@ -75,6 +75,26 @@ const typeDefs = gql`
         danhgia: Int
     }
 
+    type Comment {
+        id: ID!,
+        name: String,
+        email: String,
+        comment: String,
+        avatar: String,
+        danhgia: String, 
+        bookId: ID!,
+    }
+
+    input CommentInput {
+        name: String,
+        email: String,
+        comment: String,
+        avatar: String,
+        danhgia: Int, 
+        bookId: ID!,
+    }
+
+
     # ROOT TYPE : gốc của loại yêu cầu truy suất dữ liệu
     type Query {
         books: [Book],
@@ -85,6 +105,7 @@ const typeDefs = gql`
         user (email: String!): User,
         orders(email: String): [Order],
         order (id: ID!): Order,
+        comments(bookId: ID!): [Comment]
     }
     
 
@@ -103,7 +124,8 @@ const typeDefs = gql`
         updateStatusOrder(id: ID!, status: Int): Order,
         deleteStatusOrder(id: ID!): Order,
         danhGiaOrder( id: ID!, comments: String, danhgia: Int ): Order,
-        login(email: String, name: String): User
+        login(email: String, name: String): User,
+        createComment(input: CommentInput): Comment
     }
 `
 

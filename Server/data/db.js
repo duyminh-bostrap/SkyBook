@@ -4,6 +4,7 @@ const User = require("../models/user");
 const slugify = require("slugify");
 const Order = require("../models/order");
 var nodemailer = require("nodemailer");
+const Comment = require("../models/comment");
 const mongooseDataMethods = {
   getAllBooks: async () => {
     return await Book.find();
@@ -55,7 +56,7 @@ const mongooseDataMethods = {
   getUsers: async () => await User.find(),
   signUpUser: async (args) => {
     const newUser = new User(args.input);
-    await newUser.save()
+    await newUser.save();
     return newUser;
   },
   createOrder: async (args) => {
@@ -63,8 +64,8 @@ const mongooseDataMethods = {
     const listOrder = JSON.parse(order.listOrder);
     let total = 0;
     listOrder.forEach((item) => {
-        total += item.book.price*item.quantity;
-    })
+      total += item.book.price * item.quantity;
+    });
     var todayDate = new Date().toISOString().slice(0, 10);
     var transporter = nodemailer.createTransport({
       service: "gmail",
@@ -519,9 +520,7 @@ const mongooseDataMethods = {
                                                         padding: 0px;
                                                         box-sizing: border-box;
                                                       "
-                                                      >Ngày đặt hàng: ${
-                                                        todayDate
-                                                      }</span
+                                                      >Ngày đặt hàng: ${todayDate}</span
                                                     >
                                                   </td>
                                                 </tr>
@@ -552,9 +551,7 @@ const mongooseDataMethods = {
                                                           style: "currency",
                                                           currency: "VND",
                                                         }
-                                                      ).format(
-                                                        total
-                                                      )}</span
+                                                      ).format(total)}</span
                                                     >
                                                   </td>
                                                 </tr>
@@ -1265,43 +1262,65 @@ const mongooseDataMethods = {
       } else {
       }
     });
-    await order.save()
+    await order.save();
     return order;
   },
-  getOrders: async ({email}) => {
-    if(email){
-      return await Order.find({ email: email})
-    }else{
-      return await Order.find()
+  getOrders: async ({ email }) => {
+    if (email) {
+      return await Order.find({ email: email });
+    } else {
+      return await Order.find();
     }
   },
   getOrderById: async (id) => await Order.findById(id),
-  updateStatusOrder: async ({id, status}) => {
+  updateStatusOrder: async ({ id, status }) => {
     const BookUpdateConditions = { _id: id };
-    return await Order.findOneAndUpdate(BookUpdateConditions, {status: status + 1}, {
-      new: true,
-    });
+    return await Order.findOneAndUpdate(
+      BookUpdateConditions,
+      { status: status + 1 },
+      {
+        new: true,
+      }
+    );
   },
-  deleteStatusOrder : async ({id}) => {
+  deleteStatusOrder: async ({ id }) => {
     const BookUpdateConditions = { _id: id };
-    return await Order.findOneAndUpdate(BookUpdateConditions, {status: 5}, {
-      new: true,
-    });
+    return await Order.findOneAndUpdate(
+      BookUpdateConditions,
+      { status: 5 },
+      {
+        new: true,
+      }
+    );
   },
-  danhGiaOrder: async ({id, comments, danhgia}) => {
+  danhGiaOrder: async ({ id, comments, danhgia }) => {
     const BookUpdateConditions = { _id: id };
-    return await Order.findOneAndUpdate(BookUpdateConditions, {comments, danhgia}, {
-      new: true,
-    });
+    return await Order.findOneAndUpdate(
+      BookUpdateConditions,
+      { comments, danhgia },
+      {
+        new: true,
+      }
+    );
   },
-  login : async ({email, name}) => {
-    const user = await User.findOne({ email: email, name: name})
-    if(user){
-      return user
-    }else{
-      return false
+  login: async ({ email, name }) => {
+    const user = await User.findOne({ email: email, name: name });
+    if (user) {
+      return user;
+    } else {
+      return false;
     }
-  }
+  },
+  createComment: async (args) => {
+    const newAuthor = new Comment(args.input);
+    await newAuthor.save();
+    return newAuthor;
+  },
+  getComments: async ( bookId) => {
+    if (bookId) {
+      return await Comment.find({ bookId: bookId });
+    }
+  },
 };
 
 module.exports = mongooseDataMethods;

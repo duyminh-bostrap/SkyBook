@@ -25,6 +25,9 @@ const resolvers = {
     order: async (parent, {id}, { mongooseDataMethods}) => {
       return await mongooseDataMethods.getOrderById(id);
     },
+    comments: async (parent, {bookId}, { mongooseDataMethods}) => {
+      return await mongooseDataMethods.getComments(bookId);
+    },
   },
   Book: {
     author: async ({ authorId }, args, { mongooseDataMethods }) => {
@@ -77,6 +80,9 @@ const resolvers = {
     },
     login : async (parent, args, { mongooseDataMethods}) => {
       return await mongooseDataMethods.login(args);
+    },
+    createComment : async (parent, args, { mongooseDataMethods}) => {
+      return await mongooseDataMethods.createComment(args);
     }
   },
 };

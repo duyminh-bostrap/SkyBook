@@ -9,7 +9,7 @@ const Footer = (props: Props) => {
     return (
         <div className="footer">
             <div className="footer-top">
-                <Row style={{ width: '1200px', margin: '0 auto' }}>
+                <Row style={{ width: '100%', margin: '0 auto' }}>
                     <Col span={12}>
                         <Typography.Title level={3} className="text-footer-h3">
                             LATES TWEETS
@@ -55,7 +55,7 @@ const Footer = (props: Props) => {
                 </Row>
             </div>
             <div className="footer-bootom">
-                <Row style={{ width: '1200px', margin: '0 auto' }}>
+                <Row style={{ width: '100%', margin: '0 auto' }}>
                     <ul className="listMenu">
                         <li className="list-menu-content">Home</li>
                         <li className="footer-soc"></li>
