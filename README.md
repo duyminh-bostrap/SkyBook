@@ -13,6 +13,7 @@ POUTH LYHEANG - 20180279
 - cd Server
 - npm install
 - npm start
+### Account: admin, pass: admin
 ## Phân công nhiệm vụ các thành viên:
 Nguyễn Duy Minh, Dương Công Hậu làm frontend giao diện các trang: 
 - Admin
@@ -30,3 +31,4 @@ Lê Xuân Nguyện, POUTH LYHEANG làm backend sử dụng nodejs, graphql xử 
 - Hiển thị thông tin sách
 - Thêm sửa xoá giỏ hàng
 - Đặt hàng
+
