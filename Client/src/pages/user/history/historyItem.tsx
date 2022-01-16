@@ -187,10 +187,10 @@ const HistoryItem = (props: Props) => {
         } else if (isViewModal === lien_he_shop) {
             html = <div>
                 <h5>Thông tin liên hệ</h5>
-                <p>Tên cửa hàng: Cửa hàng sách Mạnh Dũng</p>
+                <p>Tên cửa hàng: Cửa hàng sách Duy Minh</p>
                 <p>Địa chỉ: Số 12 Đường Cầu Diễn, Phường Phúc Diễn, Quận Bắc Từ Liêm, Thành Phố Hà Nội</p>
                 <p>Số điện thoại: 0365727226</p>
-                <p>Website: <Link to="https://nhasachmanhdung.com">https://nhasachmanhdung.com</Link></p>
+                <p>Website: <Link to="https://nhasachduyminh.com">https://nhasachduyminh.com</Link></p>
             </div>
         } else if (isViewModal === xem_danh_gia) {
             html = <div>

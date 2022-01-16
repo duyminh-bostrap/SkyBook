@@ -17,7 +17,7 @@ const UserPage = (props: Props) => {
                     <div className="d-flex align-items-center mb-5 justify-content-between">
                         <Avatar size={54} src={user.avatar} />
                         <div>
-                            <p className="m-0">Trương Mạnh Dũng</p>
+                            <p className="m-0">{user.name}</p>
                             <Link to="/user/profile" className="d-flex align-items-center"><FormOutlined className="me-2" /> Sửa hồ sơ</Link>
                         </div>
                     </div>
