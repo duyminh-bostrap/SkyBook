@@ -1,7 +1,7 @@
-import { useQuery } from '@apollo/client';
-import { Button, Card, Spin } from 'antd';
+import { useQuery, useMutation } from '@apollo/client';
+import { Button, Card, Spin , Row, Col, Form, Input, Avatar} from 'antd';
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import { Link } from 'react-router-dom';
 import { A11y, Navigation, Pagination, Scrollbar } from 'swiper';
@@ -9,13 +9,33 @@ import { Swiper, SwiperSlide } from 'swiper/react/swiper-react.js';
 import formatprice from '../../common/formatprice';
 import { toastDefault } from '../../common/toast';
 import { addToCart } from '../../features/cart/cartSlide';
-import { getBooks, getSingleBook } from '../../graphql-client/query';
+import { getBooks, getSingleBook, getComment, getAllComment } from '../../graphql-client/query';
 import './productDetail.css';
+import { addComment } from '../../graphql-client/mutations';
 interface Props {
 
 }
 
 const ProductDetail = (props: Props) => {
+    const [add, Mutation] = useMutation<any>(addComment)
+    const user = useSelector((state: any) => state.auth.user)
+    
+    const onFinish = async(values: any) => {
+        values.avatar = user.avatar
+        values.bookId = data.book.id;
+        values.name = user.name;
+        values.email = user.email;
+        values.danhgia = 5;
+        console.log('====================================');
+        console.log(values);
+        console.log('====================================');
+        add(
+            {
+                variables: values,
+                refetchQueries: [{query: getBooks}]
+            },
+        )
+    }
     const { slugProduct } = useParams()
     const dispatch = useDispatch()
     const [count, setCount] = useState(1)
@@ -26,13 +46,16 @@ const ProductDetail = (props: Props) => {
         }
     })
     const { loading: loading1, error: error1, data: data1 } = useQuery(getBooks)
-    if (loading || loading1) {
+    const { loading: loadingComment, error: errorComment, data: dataComment } = useQuery(getAllComment)
+    if (loading || loading1 ){ // || loadingComment) {
         return <Spin size="large" />
     }
     if (error) {
         return <p>error book ...</p>
     }
+    
     console.log(data);
+    // console.log(dataComment);
     const handleChange = (e: any) => {
         setCount(e.target.value)
     }
@@ -48,10 +71,18 @@ const ProductDetail = (props: Props) => {
         }
     }
 
+
+
     const bookTopQuery: any[] = [];
     if (data1?.books) {
         for (let i = 0; i < 4; i++) {
             bookTopQuery.push(data1.books[i])
+        }
+    }
+    const commentTopQuery: any[] = [];
+    if (dataComment?.comments) {
+        for (let i = 0; i < 4; i++) {
+            commentTopQuery.push(dataComment.comments[i])
         }
     }
     let images = [];
@@ -86,6 +117,7 @@ const ProductDetail = (props: Props) => {
         setCount(1)
         toastDefault("Thêm sách vào giỏ hàng thành công")
     }
+    
 
     return (
         <div>
@@ -206,23 +238,102 @@ const ProductDetail = (props: Props) => {
                                 </div>
                             </div>
                             {/* End content-product */}
-                            <div className="container mt-5">
+                            <div className="container mt-5" >
                                 <div className="d-flex justify-content-evenly border-top pt-4">
                                     <div className="description">
-                                        <p className="border-bottom border-4 border-warning">DESCRIPTION</p>
+                                        <p >DESCRIPTION</p>
                                     </div>
                                     <div className="reviews">
-                                        <p>REVIEWS</p>
+                                        <p className="border-bottom border-4 border-warning">REVIEWS</p>
                                     </div>
                                     <div className="aboutbrand">
                                         <p>ABOUT BRANDS</p>
                                     </div>
                                 </div>
                                 <div className="content-description">
-                                    <div className=" mt-4">
-                                        <span>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam fringilla augue nec est tristique auctor.
-                                            Ipsum metus feugiat sem, quis fermentum turpis eros eget velit. Donec ac tempus ante. Fusce ultricies massa massa. Fusce aliquam, purus eget sagittis vulputate, sapien libero hendrerit est, sed commodo augue nisi non neque. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tempor, lorem et placerat vestibulum, metus nisi posuere nisl, in accumsan elit odio quis mi.
-                                            Cras neque metus, consequat et blandit et, luctus a nunc. Etiam gravida vehicula tellus, in imperdiet ligula euismod eget. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nam erat mi, rutrum at sollicitudin rhoncus, ultricies posuere erat. Duis convallis, arcu nec aliquam consequat, purus felis vehicula felis, a dapibus enim lorem nec augue. Nunc facilisis sagittis ullamcorper.</span>
+                                <div className="ps-5">
+                                <div className="row">
+                                    {bookTopQuery.length > 0 && bookTopQuery.map((book) => (
+                                        <Card hoverable className="mb-2">
+                                            <div className="d-flex col-12 mt-3">
+                                                <Row>
+                                                <div className="me-2">
+                                                    <Avatar size={60} src={book.image} />
+                                                </div>
+                                                <div className="fw-bold"  style = {{margin : "0px 20px"}}>
+                                                    <p >user name</p>
+                                                    <div className="ratings ">
+                                                        <p><i className=" fa fa-star" /></p>
+                                                        <p title="2/5"><i className=" d fa fa-star" /></p>
+                                                        <p title="3/5"><i className=" fa fa-star" /></p>
+                                                        <p title="4/5"><i className=" fa fa-star" /></p>
+                                                        <p title="5/5"><i className=" fa fa-star" /></p>
+                                                    </div>
+                                                </div>
+                                                <div className="fw-bold"  style = {{margin : "0px 20px"}}>
+                                                    <div className="price fw-bold ">
+                                                        <p >email@gmail.com</p>
+                                                    </div>
+                                                    <div className="price fw-bold ">
+                                                        <p >Comment</p>
+                                                    </div>
+                                                </div>
+                                                </Row>
+                                            </div>
+                                        </Card>
+
+                                    ))}
+
+                                </div>
+                                <div className="row">
+                                    {commentTopQuery.length > 0 && commentTopQuery.map((comments) => (
+                                        <Card hoverable className="mb-2">
+                                            <Link to={"/" + comments.name } className="d-flex col-12 mt-3">
+                                                <div className="fw-bold">
+                                                    <p >{commentTopQuery.length}</p>
+                                                    <div className="ratings ">
+                                                        <p><i className=" fa fa-star" /></p>
+                                                        <p title="2/5"><i className=" d fa fa-star" /></p>
+                                                        <p title="3/5"><i className=" fa fa-star" /></p>
+                                                        <p title="4/5"><i className=" fa fa-star" /></p>
+                                                        <p title="5/5"><i className=" fa fa-star" /></p>
+                                                    </div>
+                                                    <div className="price fw-bold ">
+                                                        <p >{formatprice(comments.name)}</p>
+                                                    </div>
+                                                    <div className="price fw-bold ">
+                                                        <p >Tác giả: {comments.name}</p>
+                                                    </div>
+                                                </div>
+                                            </Link>
+                                        </Card>
+                                    ))}
+                                </div>
+                                    
+                                    <Form style={{ overflow: 'auto' }} name="dynamic_form_nest_item" onFinish={onFinish} autoComplete="off">
+                                        <Col>
+                                        <Row>
+                                        <div className="mt-2" style = {{margin : "40px 20px"}}>
+                                            <label className="fw-bold" >Rate 1-5 stars </label>
+                                        </div>
+                                            <p style = {{margin : "10px 0px"}}><i className=" fa fa-star" /></p>
+                                            <p title="2/5" style = {{margin : "10px 0px"}}><i className=" d fa fa-star" /></p>
+                                            <p title="3/5" style = {{margin : "10px 0px"}}><i className=" fa fa-star" /></p>
+                                            <p title="4/5" style = {{margin : "10px 0px"}}><i className=" fa fa-star" /></p>
+                                            <p title="5/5" style = {{margin : "10px 0px"}}><i className=" fa fa-star" /></p>
+                                        <div className="mt-2" style = {{margin : "20px 20px"}}>
+                                            <label className="fw-bold" >Your Comment</label>
+                                            <Form.Item name="comment"  rules={[{ required: true, message: 'Hãy bình luận về cuốn sách này' }]} >
+                                                <Input width = "200px"/>
+                                            </Form.Item>
+                                        </div>
+                                                
+                                        <Button type="primary" htmlType="submit" className="btn submit" style = {{padding : "0px 20px"}}>
+                                            Submit
+                                        </Button>
+                                        </Row>
+                                        </Col>
+                                    </Form>
                                     </div>
                                 </div>
                             </div>

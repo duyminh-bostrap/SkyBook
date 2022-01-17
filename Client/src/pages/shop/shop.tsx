@@ -54,17 +54,6 @@ const Shop = (props: Props) => {
                                 Simple Product 019
                             </h1>
                         </div>
-                        <div className="d-flex header-product-a pt-2">
-                            <div className="pe-1">
-                                <Link to="/">Home |</Link>
-                            </div>
-                            <div className="pe-1">
-                                <Link to="/">Product |</Link>
-                            </div>
-                            <div className="pe-1">
-                                <span> Shop </span>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>

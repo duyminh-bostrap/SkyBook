@@ -131,6 +131,27 @@ const danhGiaOrder = gql`
         }
     }
 ` 
+const addComment = gql`
+    mutation CreateComment($name: String, $email: String, $bookId: ID!, $avatar: String, $danhgia: Int, $comment: String){
+        createComment(input: {
+            name: $name, email: $email, avatar: $avatar, danhgia: $danhgia, bookId: $bookId, comment: $comment
+        }){
+            name
+            email
+            avatar
+            comment
+        }
+    }
+` 
 
+const deleteComment = gql`
+    mutation DeleteComment($id: ID!){
+        deleteComment(id: $id){
+            name
+            listOrder
+            date
+        }
+    }
+`
 
-export { addSingleBook, addSingleAuthor, updateSingleBook, signIn, updateSingleAuthor,  deleteAuthor, deleteBook, createOrder, updateStatusOrder, deleteStatusOrder, danhGiaOrder, logIn }
+export { addSingleBook, addSingleAuthor, updateSingleBook, signIn, updateSingleAuthor,  deleteAuthor, deleteBook, createOrder, updateStatusOrder, deleteStatusOrder, danhGiaOrder, logIn, addComment, deleteComment }

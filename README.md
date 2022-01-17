@@ -24,10 +24,10 @@ Nguyễn Duy Minh, Dương Công Hậu làm frontend giao diện các trang:
 - Giỏ Hàng
 - Trang cá nhân
 #
-Lê Xuân Nguyện, POUTH LYHEANG làm backend sử dụng nodejs, graphql xử lý các API:
+Lê Xuân Nguyện, POUTH LYHEANG làm backend sử dụng nodejs xử lý các API:
 - Đăng nhập, đăng kí
 - Admin: Thêm sửa xoá tác giả, sách, xử lý đơn hàng
-- Comment
+- Thêm, xoá Comment
 - Hiển thị thông tin sách
 - Thêm sửa xoá giỏ hàng
 - Đặt hàng

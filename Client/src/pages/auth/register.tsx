@@ -1,5 +1,5 @@
 import { useMutation } from '@apollo/client';
-import { Button, Col, Input, Row, Spin } from 'antd';
+import { Button, Col, Input, Row, Spin, Form } from 'antd';
 import {
   FacebookAuthProvider,
   getAuth,
@@ -11,7 +11,7 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from "react-router-dom";
 import '../../common/firebase/index';
 import { toastDefault } from '../../common/toast';
-import { register } from '../../features/auths/authSlice';
+import { login, register } from '../../features/auths/authSlice';
 import { signIn } from "../../graphql-client/mutations";
 import { getUserQuery } from "../../graphql-client/query";
 const provider1 = new FacebookAuthProvider();
@@ -86,8 +86,6 @@ function Register() {
           const newUser = {
             name: displayName, email, avatar: photoURL, password: uid
           };
-          localStorage.setItem("user", JSON.stringify(newUser));
-          localStorage.setItem("token", JSON.stringify(token));
           add(
             {
                 variables: newUser,
@@ -105,15 +103,13 @@ function Register() {
 
   //   email
 
-  const handleEmailLogin = () => {
-    const email = refInputEmail.current.valueOf();
-    const password = refInputPassword.current.valueOf();
-    const name = refInputUserName.current.valueOf();
-    const newUser = {email, password, avatar: null, name: name}
+  const onFinish = (values: any) => {
+    const newUser = { email: values.email, password: values.password , avatar: null, name: values.name }
+    dispatch(login(newUser))
     add(
       {
-          variables: newUser,
-          refetchQueries: [{ query:  getUserQuery}]
+        variables: newUser,
+        refetchQueries: [{ query: getUserQuery }]
       },
     )
   };
@@ -123,40 +119,42 @@ function Register() {
       <Row justify="center" style={{ height: 800 }}>
         <Col span={8}>
           <h2 style={{ margin: 40, textAlign: "center" }}>Đăng ký</h2>
-          <Input
-            placeholder="Nhập Username"
-            onChange={(e) => {
-                refInputUserName.current = e.target.value;
-            }}
-            required={true}
-            style={{ marginBottom: 20 }}
-            ref={refInputUserName}
-          />
-          <Input
-            placeholder="Nhập Email"
-            onChange={(e) => {
-              refInputEmail.current = e.target.value;
-            }}
-            required={true}
-            style={{ marginBottom: 20 }}
-            ref={refInputEmail}
-          />
-          <Input.Password
-            ref={refInputPassword}
-            placeholder="Nhập Password"
-            onChange={(e) => {
-              refInputPassword.current = e.target.value;
-            }}
-            required={true}
-            type="password"
-            style={{ marginBottom: 20 }}
-          />
-          <Button
-            style={{ width: "100%", marginBottom: 10 }}
-            onClick={handleEmailLogin}
+          <Form
+            name="basic"
+            labelCol={{ span: 8 }}
+            wrapperCol={{ span: 16 }}
+            initialValues={{ remember: true }}
+            onFinish={onFinish}
+            autoComplete="off"
           >
-            Đăng ký
-          </Button>
+            <Form.Item
+              label="User Name"
+              name="name"
+              rules={[{ required: true, message: 'Please input your username!' }]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              label="Email"
+              name="email"
+              rules={[{ required: true, message: 'Please input your email!' }]}
+            >
+              <Input />
+            </Form.Item>
+
+            <Form.Item
+              label="Password"
+              name="password"
+              rules={[{ required: true, message: 'Please input your password!' }]}
+            >
+              <Input.Password />
+            </Form.Item>
+            <Form.Item wrapperCol={{ offset: 8, span: 12 }}>
+              <Button type="primary" htmlType="submit">
+                Đăng nhập
+              </Button>
+            </Form.Item>
+          </Form>
           <Button
             style={{ width: "100%", marginBottom: 10 }}
             onClick={handleGgLogin}

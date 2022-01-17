@@ -13,6 +13,10 @@ const { SubMenu } = Menu;
 const LayoutAdmin: React.FC = () => {
     const navigate = useNavigate();
     const user = useSelector((state: any) => state.auth.user)
+    if(!user?.email){
+        navigate('/')
+        toastError('Bạn không có quyền truy cập trang này !!!')
+    }
     const { loading, error, data } = useQuery(getUserQuery, {
         variables: {
             email: user.email,
@@ -38,6 +42,7 @@ const LayoutAdmin: React.FC = () => {
             </Header>
             <Row>
                 <Col span={5}>
+                    <p key="sub1" style= {{padding: "10px 0px 0px 0px" }}> Viewer: 1</p>
                     <Menu
                         onClick={handleClick}
                         defaultSelectedKeys={['1']}
@@ -81,7 +86,7 @@ const LayoutAdmin: React.FC = () => {
                         </SubMenu>
                         <SubMenu key="sub5" icon={<SettingOutlined />} title="Bình luận">
                             <Menu.Item key="8">
-                                <Link to="/admin/books">Thống kê bình luận</Link>
+                                <Link to="/admin/comments">Thống kê bình luận</Link>
                             </Menu.Item>
                             <Menu.Item key="9">
                                 <Link to="/admin/books">Thống kê đánh giá</Link>

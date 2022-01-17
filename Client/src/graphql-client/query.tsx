@@ -148,7 +148,33 @@ const getOrderByEmail = gql`
         }
     }
 `
+const getComment = gql`
+    query getComment($bookId: String!){
+        comments(bookId: $bookId) {
+            id
+            name
+            email
+            avatar
+            comment
+            danhgia
+            bookId
+        }
+    }
+` 
+const getAllComment = gql`
+    query getAllComment{
+        comments{
+            id
+            name
+            email
+            avatar
+            comment
+            danhgia
+            bookId
+        }
+    }
+`
 
 
 export { getBooks, getAuthors, getSingleBook, getOrderByEmail,
-getUsers, getSingleAuthor, getUserQuery, getOrders, getSingleOrder}
+getUsers, getSingleAuthor, getUserQuery, getOrders, getSingleOrder, getComment, getAllComment}

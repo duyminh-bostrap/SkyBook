@@ -1,11 +1,27 @@
-import React from 'react'
 import { Row, Col, Typography } from 'antd';
+import React, { useEffect, useRef, useState } from 'react';
 import './footer.css';
 interface Props {
 
 }
-
+function getWindowDimensions() {
+    const { innerWidth: width, innerHeight: height } = window;
+    return {
+      width,
+      height
+    };
+  }
 const Footer = (props: Props) => {
+    const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions());
+    const [keySearch, setKeySearch] = useState<String>('');
+    useEffect(() => {
+        function handleResize() {
+            setWindowDimensions(getWindowDimensions());
+          }
+      
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, [keySearch])
     return (
         <div className="footer">
             <div className="footer-top">
@@ -16,13 +32,13 @@ const Footer = (props: Props) => {
                         </Typography.Title>
                         <Row>
                             <Col span={3} >
-                                <div className="footer-icon-hover">
-                                    <i className="fab fa-twitter"></i>
-                                </div>
+                                {windowDimensions.width < 1200 ? null :<div className="footer-icon-hover">
+                                 <i className="fab fa-twitter"></i>
+                                </div>}
                             </Col>
                             <Col span={21}>
-                                <Typography.Title level={5} className="footer-text-h5">3 junly, 2021</Typography.Title>
-                                <Typography.Title level={5} className="footer-text-h5">Claritas est etiam processus dynamicus, qui sequitur mutationem consuetudium lectorum. Mirum est</Typography.Title>
+                                <Typography.Title level={5} className="footer-text-h5">17 Jan, 2022</Typography.Title>
+                                <Typography.Title level={5} className="footer-text-h5">Welcome to SkyBook</Typography.Title>
                             </Col>
                         </Row>
                     </Col>
@@ -111,10 +127,10 @@ const Footer = (props: Props) => {
                             CONTACT US
                         </Typography.Title>
                         <ul className="footer-content-list">
-                            <li>Address: 78 Carpenter Street Huntington, New York 11743</li>
-                            <li>Email: contact@example.com</li>
-                            <li>Phone: (329) 1833-2302</li>
-                            <li>(485) 9127-6014</li>
+                            <li>Address: 1 Dai Co Viet, Hai Ba Trung, Ha Noi</li>
+                            <li>Email: nhom8@gmail.com</li>
+                            <li>Phone: (345) 678999</li>
+                            <li>0123456789</li>
                         </ul>
                     </Col>
                 </Row>

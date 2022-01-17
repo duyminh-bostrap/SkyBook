@@ -34,6 +34,9 @@ const notificationSlice = createSlice({
                 state.notifications.unshift(notification)
             }
             
+        },
+        removeNotification(state, action){
+            
         }
     },
 });

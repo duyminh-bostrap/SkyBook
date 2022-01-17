@@ -29,6 +29,7 @@ import History from "./pages/user/history/history";
 import HistoryDetail from "./pages/user/history/historyDetail";
 import UserPage from './pages/user/user';
 import Profile from "./pages/user/profile/profile";
+import AddComment from "./pages/admin/comment/addComment";
 
 
 
@@ -77,6 +78,7 @@ const Router: React.FC<Props> = (props) => {
           <Route path="books" element={<Book />} />
           <Route path="addbook" element={<Addbook />} />
           <Route path="editbook/:slug" element={<Editbook />} />
+          <Route path="comments" element={<AddComment />} />
         </Route>
       </Routes>
     </div>

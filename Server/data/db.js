@@ -1321,6 +1321,9 @@ const mongooseDataMethods = {
       return await Comment.find({ bookId: bookId });
     }
   },
+  getAllComments: async => {
+    return Comment.find();
+  },
 };
 
 module.exports = mongooseDataMethods;

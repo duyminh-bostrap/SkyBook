@@ -1,5 +1,5 @@
 import { useMutation } from '@apollo/client';
-import { Button, Col, Input, Row, Spin } from 'antd';
+import { Button, Col, Input, Row, Spin, Form } from 'antd';
 import {
   FacebookAuthProvider,
   getAuth,
@@ -33,26 +33,24 @@ function Login() {
   const dispatch = useDispatch()
   const navigate = useNavigate();
   const auth = getAuth();
-  const refInputEmail = useRef<any>("");
-  const refInputPassword = useRef<any>("");
-  
+
   const [add, Mutation] = useMutation<any>(logIn);
   if (Mutation.loading) {
-      return <Spin size="large" />
+    return <Spin size="large" />
   }
 
   console.log(Mutation.data);
-  
+
   if (Mutation.data?.login) {
-      const user = Mutation.data.login;
-      dispatch(login(user));
-      toastDefault('Đăng nhập thành công')
-      if(user.role === 1){
-        navigate('/admin')
-      }else{
-        navigate('/')
-      }
-      
+    const user = Mutation.data.login;
+    dispatch(login(user));
+    toastDefault('Đăng nhập thành công')
+    if (user.role === 1) {
+      navigate('/admin')
+    } else {
+      navigate('/')
+    }
+
   }
 
   //   facebook
@@ -71,7 +69,7 @@ function Login() {
           localStorage.setItem("token", JSON.stringify(token));
           add(
             {
-                variables: newUser,
+              variables: newUser,
             },
           )
         }
@@ -85,7 +83,7 @@ function Login() {
   const handleGgLogin = () => {
     signInWithPopup(auth, provider2)
       .then((result) => {
-        const credential:any = GoogleAuthProvider.credentialFromResult(result);
+        const credential: any = GoogleAuthProvider.credentialFromResult(result);
         const token = credential.accessToken;
         // The signed-in user info.
         const user = result.user;
@@ -93,11 +91,11 @@ function Login() {
         if (displayName && email) {
           add(
             {
-                variables: {name: displayName, email},
-                refetchQueries: [{ query:  getUserQuery}]
+              variables: { name: displayName, email },
+              refetchQueries: [{ query: getUserQuery }]
             },
           )
-        }else{
+        } else {
           navigate("/login")
         }
       })
@@ -108,50 +106,53 @@ function Login() {
 
   //   email
 
-  const handleEmailLogin = () => {
-    const email = refInputEmail.current.valueOf();
-    const password = refInputPassword.current.valueOf();
-    
-    const newUser = {email, password, avatar: null, name: email}
+  const onFinish = (values: any) => {
+    const newUser = { email: values.email, password: values.password , avatar: null, name: values.email }
     dispatch(login(newUser))
     add(
       {
-          variables: newUser,
-          refetchQueries: [{ query:  getUserQuery}]
+        variables: newUser,
+        refetchQueries: [{ query: getUserQuery }]
       },
     )
   };
+
+
 
   return (
     <div>
       <Row justify="center" style={{ height: 800 }}>
         <Col span={8}>
           <h2 style={{ margin: 40, textAlign: "center" }}>Đăng nhập</h2>
-          <Input
-            placeholder="Nhập Email"
-            onChange={(e) => {
-              refInputEmail.current = e.target.value;
-            }}
-            required={true}
-            style={{ marginBottom: 20 }}
-            ref={refInputEmail}
-          />
-          <Input.Password
-            ref={refInputPassword}
-            placeholder="Nhập Password"
-            onChange={(e) => {
-              refInputPassword.current = e.target.value;
-            }}
-            required={true}
-            type="password"
-            style={{ marginBottom: 20 }}
-          />
-          <Button
-            style={{ width: "100%", marginBottom: 10 }}
-            onClick={handleEmailLogin}
+          <Form
+            name="basic"
+            labelCol={{ span: 8 }}
+            wrapperCol={{ span: 16 }}
+            initialValues={{ remember: true }}
+            onFinish={onFinish}
+            autoComplete="off"
           >
-            Đăng nhập
-          </Button>
+            <Form.Item
+              label="Email"
+              name="email"
+              rules={[{ required: true, message: 'Please input your username!' }]}
+            >
+              <Input />
+            </Form.Item>
+
+            <Form.Item
+              label="Password"
+              name="password"
+              rules={[{ required: true, message: 'Please input your password!' }]}
+            >
+              <Input.Password />
+            </Form.Item>
+            <Form.Item wrapperCol={{ offset: 8, span: 12 }}>
+              <Button type="primary" htmlType="submit">
+                Đăng nhập
+              </Button>
+            </Form.Item>
+          </Form>
           <Button
             style={{ width: "100%", marginBottom: 10 }}
             onClick={handleGgLogin}

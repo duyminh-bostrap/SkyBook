@@ -1,3 +1,4 @@
+import { FundOutlined } from '@ant-design/icons';
 import { useMutation } from '@apollo/client';
 import {
     Button, Form,

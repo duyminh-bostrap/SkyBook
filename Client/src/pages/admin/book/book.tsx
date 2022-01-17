@@ -49,6 +49,7 @@ const Book: React.FC = (props: Props) => {
     const { loading, error, data } = useQuery(getBooks)
     const [add, Mutation] = useMutation<any>(deleteBook);
     const [page, setPage] = useState({current: 1, pageSize: 3})
+    
     if (loading) {
         return <Spin size="large" />
     }

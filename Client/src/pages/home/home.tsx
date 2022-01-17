@@ -18,7 +18,7 @@ const Home = (props: Props) => {
             <AboutComponent />
             <ProductComponent page={1} />
             <Footerhover />
-            <Aboutfooter />
+            {/* <Aboutfooter /> */}
         </div>
     )
 }

@@ -15,14 +15,7 @@ const Blog = (props: Props) => {
         <div className="header-product-text">
           <h1 className="page-header-title clr" itemProp="headline">Blog</h1>
         </div>
-        <div className="d-flex header-product-a">
-          <div className="pe-1">
-            <Link to="/">Home |</Link>
-          </div>
-          <div className="pe-1">
-            <Link to="/blog">Blog |</Link>
-          </div>
-        </div>
+        
       </div>
     </div>
   </div>
